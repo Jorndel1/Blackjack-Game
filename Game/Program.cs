@@ -6,6 +6,7 @@ namespace Game
     {
         static void Main(string[] args)
         {
+            Console.ForegroundColor = ConsoleColor.Gray;
             Game game = new Game();
         }
     }

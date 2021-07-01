@@ -8,23 +8,48 @@ namespace Game
     {
         private readonly List<Player> _players = new List<Player>();
         private Dealer _dealer;
+
+        //Constructor class
         public Game()
         {
+            _dealer = new Dealer(this);
+
             Console.WriteLine("Welcome to BlackJack v1.0\n\n");
             Console.WriteLine("Add players: Name, Name2 (separate each name by comma ',')");
 
-            _dealer = new Dealer(this);
-
-            
             CreatePlayers();
             Console.Clear();
 
-            _players[0].Hit();
+            DealPlayerCards();
 
             //Start game and show cards/score
             StartGame();
-            ShowCards();
 
+            Console.WriteLine("Game has Ended!");
+            _dealer.Hit();
+            PrintEndGame();
+        }
+
+        /// <summary>
+        /// Create Players from console input separated by ',' (comma)
+        /// </summary>
+        private void CreatePlayers()
+        {
+            //Add players with ','
+            var playerNames = Console.ReadLine().Split(',');
+            foreach (var playerName in playerNames)
+            {
+                Console.WriteLine("Name" + playerName);
+                _players.Add(new Player(playerName, this));
+            }
+        }
+
+        /// <summary>
+        /// Players get to Hit/Stand and see their scores.
+        /// Shows winner and ends game
+        /// </summary>
+        private void StartGame()
+        {
             int playersPlaying = _players.Count;
 
             while (playersPlaying >= 0)
@@ -36,7 +61,7 @@ namespace Game
                         Console.WriteLine($"---------{player.Name}----------");
                         Console.WriteLine("Your current score is: " + player.Score);
                         Console.WriteLine("Would you like to: Hit(h) or Stand(s)?");
-                        
+
 
                         if (player.Score > 21)
                         {
@@ -48,8 +73,10 @@ namespace Game
                             ConsoleKey userInput = Console.ReadKey(true).Key;
                             if (userInput == ConsoleKey.H)
                             {
-                                Console.WriteLine("Drawing a new Card!");
-                                player.Hit();
+                                var hitCard = player.Hit();
+                                //Console.WriteLine("Drawing a new Card! " + hitCard.Name);
+                                GameConsole.NewCard(hitCard);
+
                             }
                             else if (userInput == ConsoleKey.S)
                             {
@@ -64,40 +91,29 @@ namespace Game
                     }
                 }
             }
-
-            Console.WriteLine("Game has Ended!");
-            _dealer.Hit();
-            PrintEndGame();
         }
 
-
-        private void CreatePlayers()
-        {
-            //Add players with ','
-            var playerNames = Console.ReadLine()?.Split(',');
-            foreach (var playerName in playerNames)
-            {
-                Console.WriteLine("Name" + playerName);
-                _players.Add(new Player(playerName, this));
-            }
-        }
-
-        //Deal Cards
-        private void StartGame()
-        {
-            foreach (var player in _players)
-            {
-                player.GiveCard(DealCard());
-                player.GiveCard(DealCard());
-            }
-            _dealer.GiveCard(DealCard());
-        }
-
-        //Deal Cards by Random Number
+        /// <summary>
+        ///  Generates a random card with Random.Next
+        /// </summary>
+        /// <returns></returns>
         public Card DealCard()
         {
             var ran = new Random();
             return new Card(ran.Next((int)Cards.Ace, (int)Cards.King + 1));
+        }
+
+        /// <summary>
+        ///  Generate player cards and give dealer a card
+        /// </summary>
+        private void DealPlayerCards()
+        {
+            foreach (var player in _players)
+            {
+                player.Hit();
+                player.Hit();
+            }
+            _dealer.Hit();
         }
 
         //Print cards and scores in console
@@ -109,14 +125,10 @@ namespace Game
 
             foreach (var player in _players)
             {
-                player.Score = 0;
                 foreach (var card in player.ShowHand())
                 {
-                    player.Score += card.Value;
-                    Console.WriteLine($"{player.Name} Card(s): {card.Name} ({card.Value})");
+                    GameConsole.PlayerDetails(player);
                 }
-
-                Console.WriteLine("Player Score: " + player.Score);
                 Console.WriteLine("-----------------\n");
             }
         }
