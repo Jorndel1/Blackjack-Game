@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Game
 {
     public class Game
     {
-        private readonly List<Player> _players = new List<Player>();
-        private Dealer _dealer;
+        private readonly List<Player> _players = new();
+        private readonly Dealer _dealer;
 
         //Constructor class
         public Game()
@@ -19,8 +18,10 @@ namespace Game
 
             CreatePlayers();
             Console.Clear();
+            
 
             DealPlayerCards();
+            ShowCards();
 
             //Start game and show cards/score
             StartGame();
@@ -36,12 +37,14 @@ namespace Game
         private void CreatePlayers()
         {
             //Add players with ','
-            var playerNames = Console.ReadLine().Split(',');
-            foreach (var playerName in playerNames)
-            {
-                Console.WriteLine("Name" + playerName);
-                _players.Add(new Player(playerName, this));
-            }
+            var playerNames = Console.ReadLine()?.Split(',');
+
+            if (playerNames != null)
+                foreach (var playerName in playerNames)
+                {
+                    Console.WriteLine("Name" + playerName);
+                    _players.Add(new Player(playerName, this, (ConsoleColor)(new Random().Next(1, (int)ConsoleColor.White))));
+                }
         }
 
         /// <summary>
@@ -58,9 +61,7 @@ namespace Game
                 {
                     if (player.Playing)
                     {
-                        Console.WriteLine($"---------{player.Name}----------");
-                        Console.WriteLine("Your current score is: " + player.Score);
-                        Console.WriteLine("Would you like to: Hit(h) or Stand(s)?");
+                        GameConsole.PlayerPick(player);
 
 
                         if (player.Score > 21)
@@ -74,8 +75,9 @@ namespace Game
                             if (userInput == ConsoleKey.H)
                             {
                                 var hitCard = player.Hit();
-                                //Console.WriteLine("Drawing a new Card! " + hitCard.Name);
+
                                 GameConsole.NewCard(hitCard);
+                                Console.WriteLine($"Score: {player.Score}");
 
                             }
                             else if (userInput == ConsoleKey.S)
@@ -83,6 +85,8 @@ namespace Game
                                 Console.WriteLine("Your standing down, waiting for other players to finish");
                                 player.Stand();
                             }
+                            else if(userInput == ConsoleKey.Escape)
+                                Environment.Exit(0);
                         }
                     }
                     else
@@ -125,10 +129,7 @@ namespace Game
 
             foreach (var player in _players)
             {
-                foreach (var card in player.ShowHand())
-                {
-                    GameConsole.PlayerDetails(player);
-                }
+                GameConsole.PlayerDetails(player);
                 Console.WriteLine("-----------------\n");
             }
         }

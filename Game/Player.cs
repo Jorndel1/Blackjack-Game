@@ -8,16 +8,18 @@ namespace Game
     {
         public string Name { get; set; }
         public  int Score { get; set; }
+        public ConsoleColor Color { get; set; }
         public bool Playing { get; set; }
         private List<Card> Hand;
         private Game _game;
 
-        public Player(string name, Game game)
+        public Player(string name, Game game, ConsoleColor color)
         {
             Hand = new List<Card>();
             _game = game;
             Score = 0;
             Playing = true;
+            Color = color;
 
 
             if(name.Length >= 2)
