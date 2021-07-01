@@ -9,7 +9,10 @@ namespace Game
 
         public Card(int value)
         {
-            Value = value;
+            if (value is 11 or 12 or 13)
+                Value = 10;
+            else Value = value;
+
             Name = Enum.GetNames(typeof(Cards))[value - 1];
         }
     }

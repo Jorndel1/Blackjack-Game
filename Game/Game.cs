@@ -97,7 +97,7 @@ namespace Game
         public Card DealCard()
         {
             var ran = new Random();
-            return new Card(ran.Next(1,14));
+            return new Card(ran.Next((int)Cards.Ace, (int)Cards.King + 1));
         }
 
         //Print cards and scores in console
