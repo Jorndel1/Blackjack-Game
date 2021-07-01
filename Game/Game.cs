@@ -43,7 +43,7 @@ namespace Game
                 foreach (var playerName in playerNames)
                 {
                     Console.WriteLine("Name" + playerName);
-                    _players.Add(new Player(playerName, this, (ConsoleColor)(new Random().Next(1, (int)ConsoleColor.White))));
+                    _players.Add(new Player(playerName, this));
                 }
         }
 

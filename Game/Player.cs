@@ -13,14 +13,12 @@ namespace Game
         private List<Card> Hand;
         private Game _game;
 
-        public Player(string name, Game game, ConsoleColor color)
+        public Player(string name, Game game)
         {
             Hand = new List<Card>();
             _game = game;
             Score = 0;
             Playing = true;
-            Color = color;
-
 
             if(name.Length >= 2)
                 Name = name.Trim();

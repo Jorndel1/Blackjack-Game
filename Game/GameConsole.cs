@@ -14,7 +14,7 @@ namespace Game
 
         public static void PlayerDetails(Player player)
         {
-            Console.ForegroundColor = player.Color;
+            Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine($"Player: {player.Name}\nScore: {player.Score}");
 
             Console.ResetColor();
@@ -22,26 +22,26 @@ namespace Game
 
         public static void PlayerPick(Player player)
         {
-            Console.ForegroundColor = player.Color;
+            Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine($"\n-{player.Name}");
 
             Console.ForegroundColor = ConsoleColor.Gray;
-            Console.Write("Your current score is: ");
+            Console.Write("Score: ");
 
-            Console.ForegroundColor = player.Color;
+            Console.ForegroundColor = ConsoleColor.DarkMagenta;
             Console.Write(player.Score + "\n");
 
             Console.ForegroundColor = ConsoleColor.Gray;
-            Console.WriteLine("Would you like to:");
+            Console.WriteLine("Pick One:");
 
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.Write("Hit (h)");
+            Console.Write("Hit(h)");
 
             Console.ForegroundColor = ConsoleColor.Gray;
-            Console.Write("   |   ");
+            Console.Write(" | ");
 
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.Write("Stand (s)");
+            Console.Write("Stand(s)");
             Console.WriteLine();
 
             Console.ResetColor();
