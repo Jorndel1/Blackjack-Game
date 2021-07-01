@@ -15,14 +15,8 @@ namespace Game
 
             _dealer = new Dealer(this);
 
-            //Add players with ','
-            var playerNames = Console.ReadLine()?.Split(',');
-            foreach (var playerName in playerNames)
-            {
-                Console.WriteLine("Name"+playerName);
-                _players.Add(new Player(playerName, this));
-            }
-
+            
+            CreatePlayers();
             Console.Clear();
 
             _players[0].Hit();
@@ -63,22 +57,29 @@ namespace Game
                                 player.Stand();
                             }
                         }
-                        
-
-                        
                     }
                     else
                     {
                         playersPlaying--;
                     }
-
-                    
                 }
             }
 
             Console.WriteLine("Game has Ended!");
             _dealer.Hit();
             PrintEndGame();
+        }
+
+
+        private void CreatePlayers()
+        {
+            //Add players with ','
+            var playerNames = Console.ReadLine()?.Split(',');
+            foreach (var playerName in playerNames)
+            {
+                Console.WriteLine("Name" + playerName);
+                _players.Add(new Player(playerName, this));
+            }
         }
 
         //Deal Cards
@@ -130,27 +131,20 @@ namespace Game
                 Console.WriteLine($"{player.Name} : {player.Score}");
             }
 
-            int highScore = 0;
+            Player winner = _dealer;
             foreach (var player in _players)
             {
-                if (player.Score > 21 && player.Score < _dealer.Score && player.Score > highScore)
+                if (player.Score <= 21 && player.Score > winner.Score)
                 {
-                    highScore = player.Score;
+                    winner = player;
                 }
             }
 
-            foreach (var player in _players)
-            {
-                if (player.Score == highScore)
-                {
-                    Console.WriteLine("Winner is: " + player.Name);
-                    break;
-                }
-                else
-                {
-                    Console.WriteLine("Winner is Dealer!");
-                }
-            }
+            if(winner.Score > _dealer.Score)
+                Console.WriteLine("Winner is " + winner.Name);
+            else Console.WriteLine("Winner is " + _dealer.Name);
+
+            
         }
     }
 }
