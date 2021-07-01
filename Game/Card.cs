@@ -6,23 +6,11 @@ namespace Game
     {
         public string Name { get; set; }
         public int Value { get; set; }
-        public int Amount { get; set; }
 
         public Card(int value)
         {
             Value = value;
-            Amount = 4;
-
-            foreach (var card in Enum.GetNames(typeof(Cards)))
-            {
-                var val = (Cards)Enum.Parse(typeof(Cards), card);
-                if ((int)val == value)
-                    Name = card;
-
-                //All image cards has the value 10
-                if (Name == "Jack" || Name == "Queen" || Name == "King")
-                    Value = 10;
-            }
+            Name = Enum.GetNames(typeof(Cards))[value - 1];
         }
     }
 
