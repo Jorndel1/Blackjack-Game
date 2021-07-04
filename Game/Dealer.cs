@@ -1,12 +1,14 @@
-﻿using System;
-
-namespace Game
+﻿namespace Game
 {
-    public class Dealer : Player
+    public partial class GameTable
     {
-        public Dealer(Game game):base("Dealer", game, ConsoleColor.Magenta)
+        public class Dealer : Player
         {
-            
+            public Dealer(CardDeck deck): base("Dealer", deck)
+            {
+                Hit();
+                Hit();
+            }
         }
     }
 }
