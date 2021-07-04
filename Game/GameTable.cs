@@ -38,6 +38,7 @@ namespace Game
                 _dialog.DisplayCardDraw(player, player.Hit());
                 _dialog.DisplayCardDraw(player, player.Hit());
             }
+            _dialog.DisplayCardDraw(_dealer, _dealer.Hit());
 
             _dialog.DisplayMessage("\nReady to begin playing? (Y/N)");
             var playerChoice = Console.ReadKey().Key;

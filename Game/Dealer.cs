@@ -7,7 +7,6 @@
             public Dealer(CardDeck deck): base("Dealer", deck)
             {
                 Hit();
-                Hit();
             }
         }
     }
