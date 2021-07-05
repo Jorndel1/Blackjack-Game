@@ -35,7 +35,7 @@ namespace Game
             }
 
             //Make sure no card is higher value than 10 (ace is special case to be added)
-            if (value is 11 or 12 or 13)
+            if (value is (int)Cards.Jack or (int)Cards.Queen or (int)Cards.King)
                 rValue = 10;
             else if (value is 1)
                 rValue = 11;

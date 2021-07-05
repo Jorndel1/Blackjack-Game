@@ -33,7 +33,7 @@ namespace Game
 
                 game.StartGame();
 
-                Console.ForegroundColor = ConsoleColor.Red;
+                Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine("\n\nWould you like to keep playing? Yes(y)");
                 var keepPlayingGame = Console.ReadKey(true).Key;
                 if (keepPlayingGame != ConsoleKey.Y)

@@ -46,11 +46,6 @@ namespace Game
         {
             IsPlaying = false;
         }
-
-        public void AceValue()
-        {
-            Score -= 10;
-        }
         public List<Card> GetDeck()
         {
             return _deck;

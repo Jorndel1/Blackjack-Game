@@ -52,7 +52,6 @@ namespace Game
             else _dialog.DisplayMessage("Another time maybe? :)");
             
         }
-
         private void BeginPlaying()
         {
             _dialog.Clear();
@@ -66,7 +65,6 @@ namespace Game
             }
             EndPlaying();
         }
-
         private bool PlayerTurn(IPlayers player)
         {
             _dialog.DisplayMessage($"{player.Name}s Turn!");
@@ -76,7 +74,8 @@ namespace Game
                     return true;
 
                 _dialog.DisplayScore(player);
-                _dialog.DisplayMessage("Would you like to:\n - Hit(h) or Stand(s) -\n");
+                _dialog.DisplayCards(player);
+                _dialog.DisplayMessage("\nWould you like to:\n - Hit(h) or Stand(s) -\n");
 
                 var playerChoice = Console.ReadKey(true).Key;
                 if (playerChoice == ConsoleKey.S)
