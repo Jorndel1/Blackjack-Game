@@ -34,6 +34,14 @@ namespace Game
             {
                 _dialog.DisplayCardDraw(player, player.Hit());
                 _dialog.DisplayCardDraw(player, player.Hit());
+                _dialog.DisplayScore(player);
+                _dialog.DisplayMessage("-------------------------------");
+
+                if (player.Score == 21)
+                {
+                    EndPlaying(true, player);
+                    return;
+                }
             }
             _dialog.DisplayCardDraw(_dealer, _dealer.Hit());
 
@@ -64,6 +72,8 @@ namespace Game
             _dialog.DisplayMessage($"{player.Name}s Turn!");
             while (player.IsPlaying)
             {
+                if (player.Score == 21)
+                    return true;
 
                 _dialog.DisplayScore(player);
                 _dialog.DisplayMessage("Would you like to:\n - Hit(h) or Stand(s) -\n");
@@ -71,6 +81,7 @@ namespace Game
                 var playerChoice = Console.ReadKey(true).Key;
                 if (playerChoice == ConsoleKey.S)
                 {
+                    _dialog.DisplayScore(player);
                     _dialog.DisplayMessage($"{player.Name} stands!");
                     player.Stand();
                     return false;
@@ -87,12 +98,13 @@ namespace Game
                             _dialog.DisplayCardDraw(player, card);
                             _dialog.DisplayScore(player);
                             _dialog.DisplayMessage("Busted! Score over 21!\n\n");
-                            return false;
+                        break;
+                        
                         case 21:
                             _dialog.DisplayScore(player);
                             _dialog.DisplayMessage("Blackjack!");
                             player.Stand();
-                            return true;
+                        return true;
                     }
                 }
 
@@ -119,7 +131,6 @@ namespace Game
                 if (_dealer.Score > 21)
                 {
                     _dialog.Clear();
-                    _dialog.DisplayScore(_dealer);
                     _dialog.DisplayMessage("Dealer is Busted! Score over 21!");
                 }
 
@@ -151,6 +162,7 @@ namespace Game
                 _dialog.DisplayScore(player);
 
             _dialog.DisplayMessage($"\nWinner is: {winner.Name} with a score of {winner.Score}");
+            _dialog.DisplayScore(winner);
         }
     }
 }

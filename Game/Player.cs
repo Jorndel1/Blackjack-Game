@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Game
 {
@@ -9,8 +10,8 @@ namespace Game
         public bool IsPlaying { get; private set; }
         public bool IsBusted { get; private set; }
 
-        private List<Card> _deck = new();
-        private CardDeck _tableDeck;
+        private readonly List<Card> _deck = new();
+        private readonly CardDeck _tableDeck;
 
         public Player(string name, CardDeck tableDeck)
         {
@@ -27,15 +28,17 @@ namespace Game
         {
             var card = _tableDeck.GetCard();
             _deck.Add(card);
+
             Score += card.Value;
+            if (Score > 21 && _deck.Any(c => c.Name.Contains("Ace")))
+                Score -= 10;
 
-            if (Score > 21)
-            {
-                IsPlaying = false;
-                IsBusted = true;
-            }
-                
+            if (Score <= 21) 
+                return card;
 
+            //Player is Busted :(
+            IsPlaying = false;
+            IsBusted = true;
             return card;
         }
 
@@ -44,7 +47,10 @@ namespace Game
             IsPlaying = false;
         }
 
-
+        public void AceValue()
+        {
+            Score -= 10;
+        }
         public List<Card> GetDeck()
         {
             return _deck;

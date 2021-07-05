@@ -37,10 +37,11 @@ namespace Game
             //Make sure no card is higher value than 10 (ace is special case to be added)
             if (value is 11 or 12 or 13)
                 rValue = 10;
+            else if (value is 1)
+                rValue = 11;
             else rValue = value;
 
-
-            string rName = Enum.GetNames(typeof(Cards))[value] + deckName;
+            var rName = Enum.GetNames(typeof(Cards))[value] + deckName;
 
             return new Card(rName, rValue + 1);
         }

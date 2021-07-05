@@ -1,55 +1,46 @@
-﻿using System;
+﻿#nullable enable
+using System;
 
 namespace Game
 {
     public class GameConsole : IGameDialog
     {
+        public void Clear() => Console.Clear();
         public void DisplayError(string message)
         {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("ERROR: " + message);
-
-            Console.ResetColor();
+            PrintMessage("ERROR: " + message, ConsoleColor.Red);
         }
-
         public void DisplayMessage(string message)
         {
-            Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine(message);
-
-            Console.ResetColor();
+            PrintMessage(message, ConsoleColor.White);
         }
+
 
         public void DisplayScore(IPlayers player)
         {
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine($"- {player.Name}s score is: {player.Score}");
-
-            Console.ResetColor();
+            PrintMessage($"- {player.Name}s score is: {player.Score}", ConsoleColor.Yellow);
         }
-        public void Clear()
-        {
-            Console.Clear();
-        }
-
         public void DisplayCardDraw(IPlayers player, Card card)
         {
-            Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine($"{player.Name} received '{card.Name}' ({card.Value})");
-            Console.WriteLine("----------------------------------------------------\n");
-
-            Console.ResetColor();
+            PrintMessage($"{player.Name} received ", ConsoleColor.Gray, false);
+            PrintMessage($"'{card.Name}' ({card.Value})", ConsoleColor.Magenta);
         }
-
         public void DisplayCards(IPlayers player)
         {
-            Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine($"{player.Name} has the following cards:");
+            PrintMessage($"{player.Name} has the following cards:");
 
-            Console.ForegroundColor = ConsoleColor.Magenta;
             foreach (var card in player.GetDeck())
-                Console.Write(card.Name + " | ");
-                
+                PrintMessage(card.Name + " | ", ConsoleColor.Magenta, false);
+        }
+
+
+        public void PrintMessage(string message, ConsoleColor color = ConsoleColor.Gray, bool newLine = true)
+        {
+            Console.ForegroundColor = color;
+            if (newLine)
+                message += "\n";
+            Console.Write(message);
+
             Console.ResetColor();
         }
     }
