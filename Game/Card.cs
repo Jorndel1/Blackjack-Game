@@ -1,25 +1,19 @@
-﻿using System;
-
-namespace Game
+﻿namespace Game
 {
     public class Card
     {
-        public string Name { get; set; }
-        public int Value { get; set; }
+        public string Name { get; private set; }
+        public int Value { get; private set; }
 
-        public Card(int value)
+        public Card(string name, int value)
         {
-            if (value is 11 or 12 or 13)
-                Value = 10;
-            else Value = value;
-
-            Name = Enum.GetNames(typeof(Cards))[value - 1];
+            Name = name;
+            Value = value;
         }
     }
-
     internal enum Cards
     {
-        Ace = 1,
+        Ace,
         Two,
         Three,
         Four,
@@ -29,8 +23,8 @@ namespace Game
         Eight,
         Nine,
         Ten,
-        Jack = 11,
-        Queen = 12,
-        King = 13
+        Jack,
+        Queen,
+        King
     }
 }
