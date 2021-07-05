@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Game
 {
@@ -22,10 +23,6 @@ namespace Game
             _players.Add(player);
         }
 
-        public List<IPlayers> GetPlayers()
-        {
-            return _players;
-        }
 
         public void StartGame()
         {
@@ -72,33 +69,33 @@ namespace Game
                 _dialog.DisplayMessage("Would you like to:\n - Hit(h) or Stand(s) -\n");
 
                 var playerChoice = Console.ReadKey(true).Key;
-                if (playerChoice == ConsoleKey.H)
-                {
-                    var card = player.Hit();
-                    _dialog.DisplayCardDraw(player, card);
-
-                    if (player.Score > 21)
-                    {
-                        _dialog.Clear();
-                        _dialog.DisplayCardDraw(player, card);
-                        _dialog.DisplayScore(player);
-                        _dialog.DisplayMessage("Busted! Score over 21!\n\n");
-                        return false;
-                    }
-                    else if (player.Score == 21)
-                    {
-                        _dialog.DisplayScore(player);
-                        _dialog.DisplayMessage("Blackjack!");
-                        player.Stand();
-                        return true;
-                    }
-                }
-                else if (playerChoice == ConsoleKey.S)
+                if (playerChoice == ConsoleKey.S)
                 {
                     _dialog.DisplayMessage($"{player.Name} stands!");
                     player.Stand();
                     return false;
                 }
+                if (playerChoice == ConsoleKey.H)
+                {
+                    var card = player.Hit();
+                    _dialog.DisplayCardDraw(player, card);
+
+                    switch (player.Score)
+                    {
+                        case > 21:
+                            _dialog.Clear();
+                            _dialog.DisplayCardDraw(player, card);
+                            _dialog.DisplayScore(player);
+                            _dialog.DisplayMessage("Busted! Score over 21!\n\n");
+                            return false;
+                        case 21:
+                            _dialog.DisplayScore(player);
+                            _dialog.DisplayMessage("Blackjack!");
+                            player.Stand();
+                            return true;
+                    }
+                }
+
                 _dialog.DisplayMessage("");
                 _dialog.DisplayMessage("");
             }
@@ -133,14 +130,17 @@ namespace Game
                 foreach (var player in _players)
                 {
                     if (!player.IsBusted && player.Score > winner.Score)
-                        winner = (Player)player;
+                        winner = player;
                 }
 
                 if (winner.Name == "placeholder")
                     _dialog.DisplayError("No winners, everyone got busted!");
                 else
                 {
-                    PrintWinner(winner);
+                    bool draw = _players.Any(p => p.Score == winner.Score && p.Name != winner.Name);
+                    if(draw)
+                        _dialog.DisplayError("It's a draw, two winners!");
+                    else PrintWinner(winner);
                 }
             }
         }

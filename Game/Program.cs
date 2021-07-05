@@ -4,7 +4,7 @@ namespace Game
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
             var game = new GameTable();
             Console.WriteLine("Before the game beings we need some player(s)!");
