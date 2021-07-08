@@ -12,10 +12,12 @@ namespace Game
         private readonly IGameDialog _dialog;
         public GameTable()
         {
-            Deck = new CardDeck();
+            Deck = new();
+            _players = new();
+
             _dialog = new GameConsole();
             _dealer = new Dealer(Deck);
-            _players = new List<IPlayers>();
+            
         }
 
         public void AddPlayer(IPlayers player)
@@ -29,7 +31,7 @@ namespace Game
             _dialog.Clear();
             _dialog.DisplayMessage("Welcome to BlackJack!");
 
-            _dialog.DisplayMessage("Giving out cards:\n");
+            _dialog.DisplayMessage("Dealing cards:\n");
             foreach (var player in _players)
             {
                 _dialog.DisplayCardDraw(player, player.Hit());
@@ -37,12 +39,15 @@ namespace Game
                 _dialog.DisplayScore(player);
                 _dialog.DisplayMessage("-------------------------------");
 
+                //Check if player has Blackjack, end game if so
                 if (player.Score == 21)
                 {
                     EndPlaying(true, player);
                     return;
                 }
             }
+
+            //Deal a card to the dealer and show it
             _dialog.DisplayCardDraw(_dealer, _dealer.Hit());
 
             _dialog.DisplayMessage("\nReady to begin playing? (Y/N)");
@@ -52,6 +57,10 @@ namespace Game
             else _dialog.DisplayMessage("Another time maybe? :)");
             
         }
+
+        /// <summary>
+        /// Player loop to play the game
+        /// </summary>
         private void BeginPlaying()
         {
             _dialog.Clear();
@@ -59,12 +68,18 @@ namespace Game
             {
                 if (PlayerTurn(player))
                 {
-                    EndPlaying(true, player);
+                    EndPlaying(true, player); //If player get's blackjack during the game, end game and say as winner.
                     return;
                 }
             }
             EndPlaying();
         }
+
+        /// <summary>
+        /// Game logic for player to hit/stand and check if score is still play-able
+        /// </summary>
+        /// <param name="player">The player which is playing</param>
+        /// <returns>If player has blackjack or not</returns>
         private bool PlayerTurn(IPlayers player)
         {
             _dialog.DisplayMessage($"{player.Name}s Turn!");
@@ -90,6 +105,8 @@ namespace Game
                     var card = player.Hit();
                     _dialog.DisplayCardDraw(player, card);
 
+
+                    //Game Logic
                     switch (player.Score)
                     {
                         case > 21:
@@ -112,6 +129,12 @@ namespace Game
             }
             return false;
         }
+
+        /// <summary>
+        /// End the game and say who won or if dealer won
+        /// </summary>
+        /// <param name="blackjack">If a player got Blackjack, we end the game and say as winner</param>
+        /// <param name="winner">The player who got Blackjack and won the game</param>
         private void EndPlaying(bool blackjack = false, IPlayers winner = null)
         {
             //If blackjack winner
@@ -121,6 +144,8 @@ namespace Game
             {
                 _dialog.DisplayMessage("All players are done!\nNow Dealers turn\n");
                 _dialog.DisplayScore(_dealer);
+
+                //Game Logic for the Dealer
                 while (_dealer.Score <= 17)
                 {
                     _dialog.DisplayCardDraw(_dealer, _dealer.Hit());
@@ -136,6 +161,7 @@ namespace Game
                 _players.Add(_dealer);
 
 
+                //Find the winner of the game
                 winner = new Player("placeholder", Deck);
                 foreach (var player in _players)
                 {
@@ -154,6 +180,11 @@ namespace Game
                 }
             }
         }
+
+        /// <summary>
+        /// Prints the winner and display everyone score
+        /// </summary>
+        /// <param name="winner">The winner we have from EndPlaying method</param>
         private void PrintWinner(IPlayers winner)
         {
             _dialog.DisplayMessage("\n");

@@ -34,7 +34,7 @@ namespace Game
         }
 
 
-        public void PrintMessage(string message, ConsoleColor color = ConsoleColor.Gray, bool newLine = true)
+        private void PrintMessage(string message, ConsoleColor color = ConsoleColor.Gray, bool newLine = true)
         {
             Console.ForegroundColor = color;
             if (newLine)

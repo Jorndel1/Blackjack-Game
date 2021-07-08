@@ -12,6 +12,7 @@ namespace Game
 
         private readonly List<Card> _deck = new();
         private readonly CardDeck _tableDeck;
+        private int _aceCount = 0;
 
         public Player(string name, CardDeck tableDeck)
         {
@@ -29,10 +30,22 @@ namespace Game
             var card = _tableDeck.GetCard();
             _deck.Add(card);
 
-            Score += card.Value;
-            if (Score > 21 && _deck.Any(c => c.Name.Contains("Ace")))
-                Score -= 10;
+            
 
+            Score += card.Value;
+
+
+            //Special Case of Ace
+            if (card.Name.Contains("Ace"))
+                ++_aceCount;
+
+            if (Score > 21 && _deck.Any(c => c.Name.Contains("Ace")) && _aceCount > 0)
+            {
+                Score -= 10;
+                _aceCount--;
+            }
+
+            //Return the card as long as we're not busted
             if (Score <= 21)
                 return card;
 
