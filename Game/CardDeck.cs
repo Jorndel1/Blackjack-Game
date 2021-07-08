@@ -34,7 +34,7 @@ namespace Game
                 deckName = " of Clubs";
             }
 
-            //Make sure no card is higher value than 10 (ace is special case to be added)
+            //Make sure no card is higher value than 10
             if (value is (int)Cards.Jack or (int)Cards.Queen or (int)Cards.King)
                 rValue = 10;
             else if (value is 1)

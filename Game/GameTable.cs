@@ -81,7 +81,7 @@ namespace Game
                 if (playerChoice == ConsoleKey.S)
                 {
                     _dialog.DisplayScore(player);
-                    _dialog.DisplayMessage($"{player.Name} stands!");
+                    _dialog.DisplayMessage($"{player.Name} stands!\n");
                     player.Stand();
                     return false;
                 }

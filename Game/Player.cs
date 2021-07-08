@@ -33,7 +33,7 @@ namespace Game
             if (Score > 21 && _deck.Any(c => c.Name.Contains("Ace")))
                 Score -= 10;
 
-            if (Score <= 21) 
+            if (Score <= 21)
                 return card;
 
             //Player is Busted :(
@@ -42,13 +42,7 @@ namespace Game
             return card;
         }
 
-        public void Stand()
-        {
-            IsPlaying = false;
-        }
-        public List<Card> GetDeck()
-        {
-            return _deck;
-        }
+        public void Stand() => IsPlaying = false;
+        public List<Card> GetDeck() => _deck;
     }
 }
