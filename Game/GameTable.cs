@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 
 namespace Game
 {
@@ -82,7 +83,10 @@ namespace Game
         /// <returns>If player has blackjack or not</returns>
         private bool PlayerTurn(IPlayers player)
         {
-            _dialog.DisplayMessage($"{player.Name}s Turn!");
+            if(!player.IsBusted)
+                _dialog.DisplayMessage($"{player.Name}s Turn!");
+            else _dialog.DisplayError($"{player.Name} is busted!\n\n");
+
             while (player.IsPlaying)
             {
                 if (player.Score == 21)
@@ -113,7 +117,7 @@ namespace Game
                             _dialog.Clear();
                             _dialog.DisplayCardDraw(player, card);
                             _dialog.DisplayScore(player);
-                            _dialog.DisplayMessage("Busted! Score over 21!\n\n");
+                            _dialog.DisplayError("Busted! Score over 21!\n\n");
                         break;
                         
                         case 21:
@@ -123,8 +127,8 @@ namespace Game
                         return true;
                     }
                 }
-
-                _dialog.DisplayMessage("");
+                
+                _dialog.DisplayMessage(new string('=',20));
                 _dialog.DisplayMessage("");
             }
             return false;
@@ -144,18 +148,23 @@ namespace Game
             {
                 _dialog.DisplayMessage("All players are done!\nNow Dealers turn\n");
                 _dialog.DisplayScore(_dealer);
+                _dialog.DisplayCards(_dealer);
+                _dialog.DisplayMessage("\n\n");
 
                 //Game Logic for the Dealer
                 while (_dealer.Score <= 17)
                 {
+                    //Thread.Sleep(1000);//Have a little delay
                     _dialog.DisplayCardDraw(_dealer, _dealer.Hit());
+                    _dialog.DisplayCards(_dealer);
+                    _dialog.DisplayMessage("");
                     _dialog.DisplayScore(_dealer);
+                    _dialog.DisplayMessage("\n\n");
                 }
 
                 if (_dealer.Score > 21)
                 {
-                    _dialog.Clear();
-                    _dialog.DisplayMessage("Dealer is Busted! Score over 21!");
+                    _dialog.DisplayError("Dealer is Busted! Score over 21!");
                 }
 
                 _players.Add(_dealer);
@@ -174,8 +183,12 @@ namespace Game
                 else
                 {
                     bool draw = _players.Any(p => p.Score == winner.Score && p.Name != winner.Name);
-                    if(draw)
+                    if (draw)
+                    {
+                        foreach (var player in _players)
+                            _dialog.DisplayScore(player);
                         _dialog.DisplayError("It's a draw, two winners!");
+                    }
                     else PrintWinner(winner);
                 }
             }

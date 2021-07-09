@@ -8,7 +8,7 @@ namespace Game
         public void Clear() => Console.Clear();
         public void DisplayError(string message)
         {
-            PrintMessage("ERROR: " + message, ConsoleColor.Red);
+            PrintMessage(message, ConsoleColor.Red);
         }
         public void DisplayMessage(string message)
         {

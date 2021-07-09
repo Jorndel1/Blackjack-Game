@@ -29,11 +29,7 @@ namespace Game
         {
             var card = _tableDeck.GetCard();
             _deck.Add(card);
-
-            
-
             Score += card.Value;
-
 
             //Special Case of Ace
             if (card.Name.Contains("Ace"))
